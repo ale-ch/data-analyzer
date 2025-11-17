@@ -1,0 +1,9 @@
+name: huggingface
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - huggingface_hub=1.1.4
+  - pip=25.3
+  - pip:
+      - cmake==4.1.2
