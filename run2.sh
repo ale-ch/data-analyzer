@@ -3,7 +3,7 @@
 set -e
 
 # Directory where your Snakefile lives (fixed location)
-PIPELINE_DIR="/path/to/pipeline"
+PIPELINE_DIR="/Users/work/Documents/Programming/test/data-analyzer"
 
 # Run Snakemake so that the work directory is where run.sh is launched
 snakemake \
