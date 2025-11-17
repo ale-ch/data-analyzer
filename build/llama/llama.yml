@@ -1,8 +1,0 @@
-name: llama
-channels:
-  - conda-forge
-dependencies:
-  - python=3.11.13
-  - pip=25.3
-  - pip:
-      - llama_cpp_python==0.3.16
