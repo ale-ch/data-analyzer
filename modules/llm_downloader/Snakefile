@@ -1,0 +1,141 @@
+# rule build_and_merge_qwen:
+#     conda:
+#         "envs/huggingface.yml"
+#     output:
+#         "qwen2.5-7b-instruct-q5_k_m.gguf"
+#     shell:
+#         r"""
+#         # Clone llama.cpp if missing
+#         if [ ! -d llama.cpp ]; then
+#             git clone https://github.com/ggml-org/llama.cpp
+#         fi
+# 
+#         # Build llama.cpp
+#         cd llama.cpp
+#         cmake -B build
+#         cmake --build build --config Release
+#         cd ..
+# 
+#         # Download model chunks
+#         hf download Qwen/Qwen2.5-7B-Instruct-GGUF \
+#             --include "qwen2.5-7b-instruct-q5_k_m*.gguf" \
+#             --local-dir .
+# 
+#         # Merge GGUF files
+#         ./llama.cpp/build/bin/llama-gguf-split \
+#             --merge qwen2.5-7b-instruct-q5_k_m-00001-of-00002.gguf \
+#                     qwen2.5-7b-instruct-q5_k_m.gguf
+#         """
+
+
+
+# rule build_and_merge_llama31_8b:
+#     conda:
+#         "envs/huggingface.yml"
+#     output:
+#         "Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf"
+#     shell:
+#         r"""
+#         # Clone llama.cpp if missing
+#         if [ ! -d llama.cpp ]; then
+#             git clone https://github.com/ggml-org/llama.cpp
+#         fi
+# 
+#         # Build llama.cpp
+#         cd llama.cpp
+#         cmake -B build
+#         cmake --build build --config Release
+#         cd ..
+# 
+#         # Download single GGUF file
+#         hf download bartowski/Meta-Llama-3.1-8B-Instruct-GGUF \
+#             --include "Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf" \
+#             --local-dir .
+# 
+#         # Move/rename to expected output name if needed
+#         mv Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf {output}
+#         """
+
+
+
+rule build_and_merge_model:
+    conda:
+        "envs/huggingface.yml"
+    output:
+        "qwen2.5-14b-instruct-q5_k_m.gguf"
+    shell:
+        r"""
+        # Clone llama.cpp if missing
+        if [ ! -d llama.cpp ]; then
+            git clone https://github.com/ggml-org/llama.cpp
+        fi
+
+        # Build llama.cpp
+        cd llama.cpp
+        cmake -B build
+        cmake --build build --config Release
+        cd ..
+
+        # Download single GGUF file
+        hf download Qwen/Qwen2.5-14B-Instruct-GGUF \
+            --include "qwen2.5-14b-instruct-q5_k_m*.gguf" \
+            --local-dir .
+
+        # Merge GGUF files
+        ./llama.cpp/build/bin/llama-gguf-split \
+            --merge qwen2.5-14b-instruct-q5_k_m-00001-of-00003.gguf  \
+                    qwen2.5-14b-instruct-q5_k_m.gguf
+        """
+
+
+
+
+# configfile: "/Users/work/Documents/Programming/repos/data-analyzer/modules/llm_downloader/config.yaml"
+# 
+# rule download_build_and_merge:
+#     conda:
+#         "envs/huggingface.yml"
+# 
+#     input:
+#         repo = config["model_repo"],
+#         pattern = config["model_pattern"]
+# 
+#     output:
+#         "merged_model.gguf"
+# 
+#     shell:
+#         r"""
+#         mkdir -p models
+# 
+#         # Clone llama.cpp if missing
+#         if [ ! -d llama.cpp ]; then
+#             git clone https://github.com/ggerganov/llama.cpp
+#         fi
+# 
+#         # Build llama.cpp for Apple Silicon
+#         cd llama.cpp
+#         cmake -B build -DLLAMA_METAL=on
+#         cmake --build build --config Release
+#         cd ..
+# 
+#         # Download all matching GGUF files
+#         hf download {input.repo} \
+#             --include "{input.pattern}" \
+#             --local-dir "models"
+# 
+#         cd models
+# 
+#         # Count shards
+#         SHARD_COUNT=$(ls {input.pattern} | wc -l)
+# 
+#         if [ "$SHARD_COUNT" -gt 1 ]; then
+#             FIRST_SHARD=$(ls {input.pattern} | sort | head -n 1)
+#             ../llama.cpp/build/bin/llama-gguf-split \
+#                 --merge $FIRST_SHARD merged_model.gguf
+#         else
+#             SINGLE_FILE=$(ls {input.pattern})
+#             cp "$SINGLE_FILE" merged_model.gguf
+#         fi
+# 
+#         cd ..
+#         """

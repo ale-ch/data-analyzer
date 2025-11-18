@@ -1,0 +1,2 @@
+model_repo: "Qwen/Qwen2.5-32B-Instruct-GGUF"
+model_pattern: "qwen2.5-32b-instruct-q5_k_m*.gguf"
