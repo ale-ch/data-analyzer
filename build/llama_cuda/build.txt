@@ -1,0 +1,8 @@
+CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python --no-cache-dir --force-reinstall
+
+# Check nvcc is available
+nvcc --version
+
+# On Linux, may need to set
+export CUDA_HOME=/usr/local/cuda-13.0
+export PATH=$CUDA_HOME/bin:$PATH

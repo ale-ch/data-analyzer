@@ -22,11 +22,13 @@ logging.basicConfig(
 logging.info("Loading data...")
 
 data_path = "/Users/work/Documents/Programming/test/ITA_TEST/output/firms_data.csv"
+data_path = "/workspace/myfile.csv"
 df = load_data(data_path)
 
 model_path = "/Users/work/Documents/Programming/test/analyzer_test/qwen2.5-7b-instruct-q5_k_m.gguf"
 # model_path = "/Users/work/Documents/Programming/test/llama_download/Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf"
 # model_path = "/Users/work/Documents/Programming/test/llama_download/qwen2.5-14b-instruct-q5_k_m.gguf"
+model_path = "/workspace/tests/qwen2.5-14b-instruct-q5_k_m.gguf"
 llm = load_llm_model(model_path)
 
 
@@ -37,6 +39,7 @@ logging.info("Reading analysis objective...")
 
 # objective_path = "objective.txt"
 objective_path = "/Users/work/Documents/Programming/repos/data-analyzer/modules/analyzer/objective.txt"
+objective_path = "/workspace/repos/data-analyzer/modules/analyzer/objective.txt"
 user_objective = load_user_objective(objective_path)
 
 # ====================================================

@@ -27,6 +27,15 @@ def load_llm_model(model_path):
 
     return llm
 
+def load_llm_model(model_path):
+    llm = Llama(
+        model_path=model_path,
+        n_ctx=4096,
+        n_gpu_layers=-1,   # full offload
+        verbose=False
+    )
+    return llm
+
 def load_user_objective(objective_path):
     with open(objective_path) as f:
         user_objective = f.read().strip()
